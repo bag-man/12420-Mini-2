@@ -3,6 +3,7 @@
  * In mini assignment will have to implement mouseDragged() and will need link to mouse panel
  */
 import java.awt.event.*;
+import java.awt.*;
 
 public class MyMousePositionListener implements MouseMotionListener {
 	private StatusPanel statusPane;
@@ -21,6 +22,7 @@ public class MyMousePositionListener implements MouseMotionListener {
 		Circle thisOne = mousePane.findNearestCircle(e.getX(), e.getY());
 		if (thisOne != null) {
 			thisOne.update(e.getX(), e.getY());
+			thisOne.setColor(Color.RED);
 		}
 		mousePane.repaint();
 	}
