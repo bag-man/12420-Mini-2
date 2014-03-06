@@ -26,4 +26,8 @@ public class Circle {
 	public double distanceTo(double x, double y) {
 		return (Math.abs(this.x-x) + Math.abs(this.y-y));
 	}
+
+	g.setColor(color);
+        g.fillOval((int)Math.round(x-r),(int)Math.round(y-r),
+          (int)Math.round(2.0*r),(int)Math.round(2.0*r));
 }
