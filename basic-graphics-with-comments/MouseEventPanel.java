@@ -36,7 +36,7 @@ public class MouseEventPanel extends JPanel {
 	}
 
 	public Circle findNearestCircle(int x, int y) {
-	  return null;
+          return voc.findNearestCircle(x, y);
 	} 
 }
 

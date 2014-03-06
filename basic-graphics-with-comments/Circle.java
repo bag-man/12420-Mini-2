@@ -13,6 +13,11 @@ public class Circle {
 		this.r = r;
 	}
 
+        public void update(double x, double y) {
+          this.x = x;
+          this.y = y;
+        }
+
 	public void draw(Graphics g) {
 		g.fillOval((int)Math.round(x-r),(int)Math.round(y-r),
 			(int)Math.round(2.0*r),(int)Math.round(2.0*r));

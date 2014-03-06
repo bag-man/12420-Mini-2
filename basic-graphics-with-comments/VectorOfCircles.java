@@ -15,6 +15,24 @@ public class VectorOfCircles {
 		circles.add(c);
 	}
 
+	public Circle findNearestCircle(int x, int y) {
+          Circle c;
+	  double minDist = Double.MAX_VALUE;
+	  int minDistIndex = -1;
+
+	  for(int i=0; i < circles.size(); i++) {
+		  c = (Circle)(circles.get(i));
+		  if(c.distanceTo(x,y) < minDist) {
+			  minDist = c.distanceTo(x,y);
+			  minDistIndex = i;
+		  }
+	  }
+	  if((minDistIndex >= 0) && (minDist < 30)) {
+		  return circles.get(minDistIndex);
+	  }
+	  return null;
+	} 
+
 	public void removeNearestCircle(int x, int y) {
 		Circle c;
 		double minDist = Double.MAX_VALUE;

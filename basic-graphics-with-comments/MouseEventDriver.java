@@ -1,3 +1,4 @@
+
 /**
  * This class runs the basic application by creating a MouseEventFrame
  */
