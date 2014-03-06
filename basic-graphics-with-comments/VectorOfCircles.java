@@ -8,10 +8,11 @@ public class VectorOfCircles {
 	private Vector<Circle> circles;
 
 	public void reColor() {
-	  for(Circle circles: c) {
-	    setColor(Color.BLACK);
+	  for(Circle c: circles) {
+	    c.setColor(Color.BLACK);
 	  } 
 	}
+
 
 	public VectorOfCircles() {
 		circles = new Vector<Circle>();
