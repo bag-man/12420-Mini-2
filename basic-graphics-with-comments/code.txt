@@ -1,0 +1,140 @@
+/////////////////////////////////////////////////MouseEventFrame.java
+/**
+ * The object of this class creates two panels (one for Mouse stuff 
+ *     and one to show status) The MouseEventPanel has two listeners
+ */
+import java.awt.*;import java.awt.*;
+import javax.swing.*;
+public class MouseEventFrame extends SimpleFrame {
+............CODE DELETED
+        //create the mePanel's MouseListener with a link to status pane
+        mL = new MyMouseListener(stPanel,mePanel);
+        mePanel.addMouseListener(mL);
+    }
+}
+/////////////////////////////////////////////////MouseEventPanel.java
+/**
+ * The object of this class is used to collect mouse clicks and also 
+ * to display circles where the mouse has been clicked
+ * It refers to a Collection of Circles called voc (that is the Model)
+ */
+import java.awt.*;
+import javax.swing.*;
+public class MouseEventPanel extends JPanel {
+	private VectorOfCircles voc;
+	private double r = 6.0;
+
+	public MouseEventPanel() {
+		voc = new VectorOfCircles();
+		this.setBackground(Color.white);
+		this.setPreferredSize(new Dimension(300,300));
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		voc.drawAll(g);
+	}
+
+	public void addCircle(int x, int y) {
+		voc.addCircle(new Circle(x,y,r));
+		repaint();
+	}
+	public void removeNearestCircle(int x, int y) {
+		voc.removeNearestCircle(x,y);
+		repaint();
+	}
+}
+///////////////////////////////////////////////////////Circle.java
+ /**
+ * One circle with position and radius
+ */
+import java.awt.*;
+public class Circle {
+	private double x;
+	private double y;
+	private double r;
+
+	public Circle(double x, double y, double r) {
+		this.x = x;     this.y = y;    	this.r = r;
+	}
+	public void draw(Graphics g) {
+		g.fillOval((int)Math.round(x-r),(int)Math.round(y-r),
+			(int)Math.round(2.0*r),(int)Math.round(2.0*r));
+	}
+	public double distanceTo(double x, double y) {
+		return (Math.abs(this.x-x) + Math.abs(this.y-y));
+	}
+}
+//////////////////////////////////////////////MyMouseListener.java
+/**
+ * Listens to Mouse clicks
+ * updates status panel also now the Mousepanel
+ */
+import java.awt.event.*;
+import javax.swing.*;
+public class MyMouseListener implements MouseListener {
+	//needs to be linked in so can update these panels 
+	//(is also listening to mousePane)
+	private StatusPanel statusPane;
+	private MouseEventPanel mousePane;
+
+	public MyMouseListener(StatusPanel sp,MouseEventPanel mp) {
+		statusPane = sp;
+		mousePane = mp;
+	}
+............CODE DELETED
+
+	public void mouseClicked(MouseEvent e) {
+		statusPane.incrementClickCount();
+		if(SwingUtilities.isLeftMouseButton(e)) {
+			mousePane.addCircle(e.getX(),e.getY());
+		}
+		else {
+			mousePane.removeNearestCircle(e.getX(),e.getY());
+		}
+		statusPane.setNoOfCircles(mousePane.getNoOfCircles());
+	}
+.............CODE DELETED
+}
+//////////////////////////////////////////////////VectorOfCircles.java
+import java.awt.*;
+import java.util.*;
+/**
+ * This is the collection of Circles - it is the Model in this problem
+ * this should be done with Vectors which are threadsafe - more later
+ */
+public class VectorOfCircles {
+	private Vector<Circle> circles;
+
+	public VectorOfCircles() {
+		circles = new Vector<Circle>();
+	}
+	public void addCircle(Circle c) {
+		circles.add(c);
+	}
+ 	public void removeNearestCircle(int x, int y) {
+		Circle c;
+		double minDist = Double.MAX_VALUE;
+		int minDistIndex = -1;
+
+		for(int i=0; i < circles.size(); i++) {
+			c = (Circle)(circles.get(i));
+			if(c.distanceTo(x,y) < minDist) {
+				minDist = c.distanceTo(x,y);
+				minDistIndex = i;
+			}
+		}
+		if((minDistIndex >= 0) && (minDist < 30)) {
+			circles.remove(minDistIndex);
+		}
+	}
+ 	public void drawAll(Graphics g) {
+		Circle currentCircle;
+
+		for(int i=0; i < circles.size(); i++) {
+			currentCircle = (Circle)(circles.get(i));
+			currentCircle.draw(g);
+		}
+	}
+  ..........CODE DELETED
+}

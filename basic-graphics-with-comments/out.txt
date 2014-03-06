@@ -1,0 +1,130 @@
+import java.awt.*;
+import javax.swing.*;
+
+public class MouseEventFrame extends SimpleFrame {
+	MouseEventPanel mePanel = new MouseEventPanel();
+	StatusPanel stPanel = new StatusPanel();
+        MyMousePositionListener mPL; MyMouseListener mL;
+	MouseEventFrame() {
+		this.setTitle("Mouse Click Application");
+		add(mePanel,BorderLayout.CENTER);
+		add(stPanel,BorderLayout.SOUTH);
+		pack();
+
+		mPL = new MyMousePositionListener(stPanel);
+		mePanel.addMouseMotionListener(mPL);
+
+		mL = new MyMouseListener(stPanel,mePanel);
+		mePanel.addMouseListener(mL);
+	}
+}
+
+import java.awt.*;
+import javax.swing.*;
+public class MouseEventPanel extends JPanel {
+	private VectorOfCircles voc;
+	private double r = 6.0;
+	public MouseEventPanel() {
+		voc = new VectorOfCircles();
+		this.setBackground(Color.white);
+		this.setPreferredSize(new Dimension(300,300));
+	}
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		voc.drawAll(g);
+	}
+	public void addCircle(int x, int y) {
+		voc.addCircle(new Circle(x,y,r));
+		repaint();
+	}
+ 	public void removeNearestCircle(int x, int y) {
+		voc.removeNearestCircle(x,y);
+		repaint();
+	}
+ 	public int getNoOfCircles() {
+		return(voc.getNoOfCircles());
+	}
+}
+
+import java.awt.*;
+public class Circle {
+	private double x;   	private double y;    private double r;
+	public Circle(double x, double y, double r) {
+		this.x = x;   	this.y = y;   	this.r = r;
+	}
+	public void draw(Graphics g) {
+		g.fillOval((int)Math.round(x-r),(int)Math.round(y-r),
+			(int)Math.round(2.0*r),(int)Math.round(2.0*r));
+	}
+	public double distanceTo(double x, double y) {
+		return (Math.abs(this.x-x) + Math.abs(this.y-y));
+	}
+}
+import java.awt.event.*;
+import javax.swing.*;
+public class MyMouseListener implements MouseListener {
+	private StatusPanel statusPane;
+	private MouseEventPanel mousePane;
+	MyMouseListener(StatusPanel sp,MouseEventPanel mp) {
+		statusPane = sp;
+		mousePane = mp;
+	}
+	public void mouseEntered(MouseEvent e) {
+		statusPane.setInOut("yes");
+	}
+ 	public void mouseExited(MouseEvent e) {
+		statusPane.setInOut("no");
+		statusPane.setCoordinates(-1,-1);
+	}
+	public void mouseClicked(MouseEvent e) {
+		statusPane.incrementClickCount();
+		if(SwingUtilities.isLeftMouseButton(e)) {
+			mousePane.addCircle(e.getX(),e.getY());
+		}
+		else {
+			mousePane.removeNearestCircle(e.getX(),e.getY());
+		}
+		statusPane.setNoOfCircles(mousePane.getNoOfCircles());
+	}
+ 	public void mousePressed(MouseEvent e) { 	}
+	public void mouseReleased(MouseEvent e) {    	}
+}
+
+import java.awt.*;
+import java.util.*;
+//this should be done with Vectors which are threadsafe - more later
+public class VectorOfCircles {
+	private Vector<Circle> circles;
+	VectorOfCircles() {
+		circles = new Vector<Circle>();
+	}
+	public void removeNearestCircle(int x, int y) {
+		Circle c;
+		double minDist = Double.MAX_VALUE;
+		int minDistIndex = -1;
+
+		for(int i=0; i < circles.size(); i++) {
+			c = (Circle)(circles.get(i));
+			if(c.distanceTo(x,y) < minDist) {
+				minDist = c.distanceTo(x,y);
+				minDistIndex = i;
+			}
+		}
+		if((minDistIndex >= 0) && (minDist < 30)) {
+			circles.remove(minDistIndex);
+		}
+	}
+  	public void drawAll(Graphics g) {
+		Circle currentCircle;
+ 		for(int i=0; i < circles.size(); i++) {
+			currentCircle = (Circle)(circles.get(i));
+			currentCircle.draw(g);
+		}
+	}
+ 	public int getNoOfCircles() {
+		return(circles.size());
+	}
+        public void addCircle(Circle c) {
+		circles.add(c);
+	}
+}
