@@ -21,6 +21,7 @@ public class Circle {
         }
 
 	public void draw(Graphics g) {
+	        g.setColor(color); 
 		g.fillOval((int)Math.round(x-r),(int)Math.round(y-r),
 			(int)Math.round(2.0*r),(int)Math.round(2.0*r));
 	}

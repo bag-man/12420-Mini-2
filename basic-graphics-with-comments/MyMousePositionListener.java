@@ -21,8 +21,8 @@ public class MyMousePositionListener implements MouseMotionListener {
 	public void mouseDragged(MouseEvent e) {
 		Circle thisOne = mousePane.findNearestCircle(e.getX(), e.getY());
 		if (thisOne != null) {
-			thisOne.update(e.getX(), e.getY());
 			thisOne.setColor(Color.RED);
+			thisOne.update(e.getX(), e.getY());
 		}
 		mousePane.repaint();
 	}
