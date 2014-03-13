@@ -9,10 +9,9 @@ public class VectorOfCircles {
 
 	public void reColor() {
 	  for(Circle c: circles) {
-	    c.setColor(Color.BLACK);
+	    c.setColor(Color.BLUE);
 	  } 
 	}
-
 
 	public VectorOfCircles() {
 		circles = new Vector<Circle>();

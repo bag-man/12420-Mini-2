@@ -1,7 +1,7 @@
 /**
  * Listens to Mouse Moves and updates status panel (so needs link to it)
  * In mini assignment will have to implement mouseDragged() and will need link to mouse panel
- */
+**/
 import java.awt.event.*;
 import java.awt.*;
 

@@ -38,7 +38,8 @@ public class MyMouseListener implements MouseListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {	
-	  
+	  mousePane.colorAll();
+	  mousePane.repaint(); 
 	}
 
 }
